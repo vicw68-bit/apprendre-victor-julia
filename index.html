@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <div class="bg-glow" aria-hidden="true"></div>
@@ -17,7 +17,7 @@
       <p class="welcome-emoji" aria-hidden="true">💜</p>
       <p class="eyebrow">Quiz perso</p>
       <h1>Apprendre à connaître<br><span>Victor</span></h1>
-      <p class="subtitle">Julia, sauras-tu trouver les bonnes réponses ?<br>8 questions · style Kahoot · 4 images par question</p>
+      <p class="subtitle">Julia, sauras-tu trouver les bonnes réponses ?<br>8 questions · grille 2×2 · grandes images</p>
       <button id="btn-start" class="btn btn-main">C'est parti →</button>
     </div>
   </section>
@@ -34,7 +34,7 @@
     <div class="card question-card">
       <p id="question-category" class="tag">Musique</p>
       <h2 id="question-text">Question…</h2>
-      <div id="answers" class="answers kahoot-grid" role="group" aria-label="Réponses"></div>
+      <div id="answers" class="answers choice-grid" role="group" aria-label="Réponses"></div>
       <div id="feedback" class="feedback hidden"></div>
     </div>
 
@@ -57,7 +57,7 @@
     </div>
   </section>
 
-  <script src="questions.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="questions.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>

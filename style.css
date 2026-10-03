@@ -45,7 +45,7 @@ body {
 .screen {
   display: none;
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
   position: relative;
   z-index: 1;
   animation: fadeIn 0.45s ease;
@@ -150,8 +150,7 @@ h1 span {
 .timer { color: #fbbf24; font-weight: 600; }
 
 .question-card {
-  padding: 1.5rem 1.25rem 1.75rem;
-  min-height: 380px;
+  padding: 1.25rem 1rem 1.5rem;
 }
 
 .tag {
@@ -168,141 +167,103 @@ h1 span {
 }
 
 #question-text {
-  font-size: clamp(1.1rem, 3.8vw, 1.4rem);
+  font-size: clamp(1.05rem, 3.5vw, 1.35rem);
   line-height: 1.35;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   text-align: center;
 }
 
-/* Grille 2×2 type Kahoot */
-.kahoot-grid {
+/* Grille 2×2 — image grande + libellé */
+.choice-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
-.kahoot-tile {
+.choice-card {
   font-family: inherit;
-  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   padding: 0;
-  border: none;
-  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  color: #fff;
+  color: var(--texte);
+  background: rgba(255, 255, 255, 0.03);
   text-align: center;
-  min-height: 140px;
-  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
-  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.12s ease;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 
-.kahoot-tile--0 { background: #e21b3c; }
-.kahoot-tile--1 { background: #1368ce; }
-.kahoot-tile--2 { background: #d89e00; }
-.kahoot-tile--3 { background: #26890c; }
-
-.kahoot-tile:hover:not(:disabled) {
-  transform: translateY(-3px);
-  filter: brightness(1.08);
-  box-shadow: 0 9px 0 rgba(0, 0, 0, 0.35);
+.choice-card:hover:not(:disabled) {
+  border-color: rgba(168, 85, 247, 0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
 }
 
-.kahoot-tile:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+.choice-card:active:not(:disabled) {
+  transform: translateY(0);
 }
 
-.kahoot-shape {
-  position: absolute;
-  top: 0.45rem;
-  left: 0.5rem;
-  width: 22px;
-  height: 22px;
-  opacity: 0.95;
-  pointer-events: none;
+.choice-img-wrap {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 145px;
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
 }
 
-.kahoot-shape svg {
+.choice-img-wrap img {
   width: 100%;
   height: 100%;
-  display: block;
-}
-
-.kahoot-letter {
-  position: absolute;
-  top: 0.4rem;
-  right: 0.55rem;
-  font-weight: 800;
-  font-size: 0.85rem;
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-.kahoot-img-wrap {
-  flex: 1;
-  margin: 1.75rem 0.45rem 0.35rem;
-  border-radius: 10px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.2);
-  min-height: 72px;
-}
-
-.kahoot-img-wrap img {
-  width: 100%;
-  height: 72px;
   object-fit: cover;
   display: block;
 }
 
-.kahoot-img-wrap img.img-missing {
+.choice-img-wrap img.img-missing {
   object-fit: none;
-  background: rgba(0, 0, 0, 0.25);
 }
 
-.kahoot-label {
+.choice-label {
   font-weight: 700;
-  font-size: 0.78rem;
-  line-height: 1.2;
-  padding: 0.35rem 0.4rem 0.55rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  font-size: clamp(0.78rem, 2.8vw, 0.95rem);
+  line-height: 1.25;
+  padding: 0.55rem 0.45rem 0.65rem;
+  background: rgba(0, 0, 0, 0.45);
 }
 
-.kahoot-tile.correct {
-  outline: 4px solid #fff;
-  outline-offset: 2px;
-  filter: brightness(1.1);
+.choice-card.correct {
+  border-color: var(--vert);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.35);
 }
 
-.kahoot-tile.incorrect {
-  outline: 4px solid #fff;
-  outline-offset: 2px;
-  filter: grayscale(0.4) brightness(0.85);
+.choice-card.incorrect {
+  border-color: var(--rouge);
+  opacity: 0.75;
 }
 
-.kahoot-tile:disabled {
+.choice-card:disabled {
   cursor: default;
 }
 
 @media (min-width: 520px) {
-  .kahoot-tile {
-    min-height: 168px;
+  .choice-grid {
+    gap: 1rem;
   }
 
-  .kahoot-img-wrap {
-    min-height: 88px;
-    margin-left: 0.55rem;
-    margin-right: 0.55rem;
+  .choice-img-wrap {
+    min-height: 190px;
+  }
+}
+
+@media (min-width: 720px) {
+  .choice-img-wrap {
+    min-height: 240px;
   }
 
-  .kahoot-img-wrap img {
-    height: 88px;
-  }
-
-  .kahoot-label {
-    font-size: 0.85rem;
+  .choice-label {
+    padding: 0.65rem 0.5rem 0.75rem;
   }
 }
 
