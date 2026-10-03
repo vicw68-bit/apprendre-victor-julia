@@ -1,6 +1,8 @@
-Images du quiz Victor :
+Images du quiz Victor (grille Kahoot) :
 
-- victor.jpg → photo de Victor (écran d'accueil)
-- answers/ → une image par réponse (grille Kahoot, 32 fichiers)
+- answers/ — 32 fichiers (1 image par reponse)
+- victor.jpg — obsolete (accueil sans photo)
 
-Modifie questions.js si tu changes les choix ou les chemins d'images.
+Sources : Wikipedia/Wikimedia (films, plats, saisons…), photos officielles Deezer (Jul, SCH, PLK, Timal), Pexels/Pixabay (boissons), pastilles de couleur generees.
+
+Pour tout remplacer : scripts/download-answer-images.ps1
