@@ -1,13 +1,6 @@
-Images du quiz Victor :
-
-- victor.jpg   → photo de Victor (écran d'accueil, optionnel)
-- musique.jpg  → Musique
-- plat.jpg     → Sushi
-- cinema.jpg   → Cinéma
-- sport.jpg    → Ski
-- couleur.jpg  → Bleu
-- saison.jpg   → Été
-- boisson.jpg  → Boisson
-- phobie.jpg   → Eau profonde
-
-Modifie questions.js si tu changes les questions.
+Images du quiz Victor :
+
+- victor.jpg → photo de Victor (écran d'accueil)
+- answers/ → une image par réponse (grille Kahoot, 32 fichiers)
+
+Modifie questions.js si tu changes les choix ou les chemins d'images.
