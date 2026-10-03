@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprendre à connaître Victor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <section id="screen-welcome" class="screen active">
+    <div class="card welcome-card">
+      <div class="avatar-ring">
+        <img src="images/victor.jpg" alt="Victor" class="avatar" id="welcome-avatar" onerror="this.classList.add('avatar-fallback')">
+        <span class="avatar-fallback-icon" aria-hidden="true">🧑‍💻</span>
+      </div>
+      <p class="eyebrow">Quiz perso</p>
+      <h1>Apprendre à connaître<br><span>Victor</span></h1>
+      <p class="subtitle">Julia, sauras-tu trouver les bonnes réponses ?<br>8 questions · 4 choix · images</p>
+      <button id="btn-start" class="btn btn-main">C'est parti →</button>
+    </div>
+  </section>
+
+  <section id="screen-quiz" class="screen">
+    <header class="quiz-header">
+      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+      <div class="quiz-meta">
+        <span id="question-counter">Question 1 / 8</span>
+        <span id="timer" class="timer">⏱️ 6:00</span>
+      </div>
+    </header>
+
+    <div class="card question-card">
+      <p id="question-category" class="tag">Musique</p>
+      <figure id="question-figure" class="question-figure hidden">
+        <img id="question-image" src="" alt="">
+      </figure>
+      <h2 id="question-text">Question…</h2>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback hidden"></div>
+    </div>
+
+    <footer class="quiz-footer">
+      <button id="btn-next" class="btn btn-main hidden">Suivant →</button>
+    </footer>
+  </section>
+
+  <section id="screen-results" class="screen">
+    <div class="card results-card">
+      <div id="confetti-container" aria-hidden="true"></div>
+      <div id="results-emoji" class="results-emoji">💫</div>
+      <h2 id="results-title">Résultat</h2>
+      <div class="score-display">
+        <span id="final-score">0</span><span class="score-max">/ 8</span>
+      </div>
+      <p id="results-message" class="results-message"></p>
+      <div id="results-breakdown" class="results-breakdown"></div>
+      <button id="btn-restart" class="btn btn-main">Recommencer</button>
+    </div>
+  </section>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
