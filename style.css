@@ -27,9 +27,10 @@ html, body {
 
 body {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 1rem;
+  padding-top: max(1rem, env(safe-area-inset-top));
 }
 
 .bg-glow {
@@ -69,39 +70,10 @@ body {
   text-align: center;
 }
 
-.avatar-ring {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 1.25rem;
-  border-radius: 50%;
-  padding: 4px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-}
-
-.avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #2a2438;
-  display: block;
-}
-
-.avatar.avatar-fallback {
-  opacity: 0;
-}
-
-.avatar-fallback-icon {
-  position: absolute;
-  inset: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  border-radius: 50%;
-  background: #2a2438;
-  z-index: -1;
+.welcome-emoji {
+  font-size: 3.25rem;
+  margin-bottom: 0.75rem;
+  line-height: 1;
 }
 
 .eyebrow {

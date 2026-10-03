@@ -28,7 +28,6 @@ const els = {
   answers: document.getElementById("answers"),
   feedback: document.getElementById("feedback"),
   finalScore: document.getElementById("final-score"),
-  resultsTitle: document.getElementById("results-title"),
   resultsMessage: document.getElementById("results-message"),
   resultsEmoji: document.getElementById("results-emoji"),
   resultsBreakdown: document.getElementById("results-breakdown"),
@@ -41,6 +40,42 @@ const KAHOOT_ICONS = [
   `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="currentColor"/></svg>`,
   `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor"/></svg>`
 ];
+
+/** Images par libellé (secours si ancien format answers[]). */
+const CHOICE_IMAGES = {
+  Jul: "images/answers/musique-jul.jpg",
+  Timal: "images/answers/musique-timal.jpg",
+  SCH: "images/answers/musique-sch.jpg",
+  PLK: "images/answers/musique-plk.jpg",
+  Pizza: "images/answers/plat-pizza.jpg",
+  Sushi: "images/answers/plat-sushi.jpg",
+  Tacos: "images/answers/plat-tacos.jpg",
+  Raclette: "images/answers/plat-raclette.jpg",
+  Avatar: "images/answers/cinema-avatar.jpg",
+  "Le loup de Wall Street": "images/answers/cinema-loup.jpg",
+  "Project X": "images/answers/cinema-projectx.jpg",
+  Interstellar: "images/answers/cinema-interstellar.jpg",
+  Football: "images/answers/sport-foot.jpg",
+  Basket: "images/answers/sport-basket.jpg",
+  Ski: "images/answers/sport-ski.jpg",
+  Escalade: "images/answers/sport-escalade.jpg",
+  Bleu: "images/answers/couleur-bleu.jpg",
+  Rouge: "images/answers/couleur-rouge.jpg",
+  Vert: "images/answers/couleur-vert.jpg",
+  Noir: "images/answers/couleur-noir.jpg",
+  Printemps: "images/answers/saison-printemps.jpg",
+  "Été": "images/answers/saison-ete.jpg",
+  Automne: "images/answers/saison-automne.jpg",
+  Hiver: "images/answers/saison-hiver.jpg",
+  Monster: "images/answers/boisson-monster.jpg",
+  Oasis: "images/answers/boisson-oasis.jpg",
+  Coca: "images/answers/boisson-coca.jpg",
+  "Root Beer": "images/answers/boisson-rootbeer.jpg",
+  Vertige: "images/answers/phobie-vertige.jpg",
+  "Eau profonde": "images/answers/phobie-eau.jpg",
+  Araignée: "images/answers/phobie-araignee.jpg",
+  Serpent: "images/answers/phobie-serpent.jpg"
+};
 
 function showScreen(name) {
   Object.values(screens).forEach((s) => s.classList.remove("active"));
@@ -65,7 +100,26 @@ function shuffleArray(items) {
   return shuffled;
 }
 
+function normalizeChoices(q) {
+  if (Array.isArray(q.choices) && q.choices.length === 4) {
+    return q.choices.map((c) => ({
+      label: c.label,
+      image: c.image || CHOICE_IMAGES[c.label] || "",
+      imageAlt: c.imageAlt || c.label
+    }));
+  }
+  if (Array.isArray(q.answers) && q.answers.length === 4) {
+    return q.answers.map((label) => ({
+      label,
+      image: CHOICE_IMAGES[label] || "",
+      imageAlt: label
+    }));
+  }
+  return [];
+}
+
 function shuffleChoices(choices, correctLabel) {
+  if (!choices.length) return [];
   let shuffled = shuffleArray(choices);
   let tries = 0;
   while (shuffled[0].label === correctLabel && tries < 20) {
@@ -77,11 +131,13 @@ function shuffleChoices(choices, correctLabel) {
 
 function prepareQuizQuestions() {
   quizQuestions = shuffleArray(QUESTIONS).map((q) => {
-    const displayChoices = shuffleChoices(q.choices, q.correctAnswer);
+    const baseChoices = normalizeChoices(q);
+    const displayChoices = shuffleChoices(baseChoices, q.correctAnswer);
+    const correctDisplayIndex = displayChoices.findIndex((c) => c.label === q.correctAnswer);
     return {
       ...q,
       displayChoices,
-      correctDisplayIndex: displayChoices.findIndex((c) => c.label === q.correctAnswer)
+      correctDisplayIndex: correctDisplayIndex >= 0 ? correctDisplayIndex : 0
     };
   });
 }
@@ -110,9 +166,44 @@ function updateTimer() {
   els.timer.textContent = `⏱️ ${formatTime(timeLeft)}`;
 }
 
+function createKahootTile(choice, index) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = `kahoot-tile kahoot-tile--${index}`;
+
+  const shape = document.createElement("span");
+  shape.className = "kahoot-shape";
+  shape.innerHTML = KAHOOT_ICONS[index];
+
+  const letter = document.createElement("span");
+  letter.className = "kahoot-letter";
+  letter.textContent = LETTERS[index];
+
+  const imgWrap = document.createElement("span");
+  imgWrap.className = "kahoot-img-wrap";
+  if (choice.image) {
+    const img = document.createElement("img");
+    img.src = choice.image;
+    img.alt = choice.imageAlt || choice.label;
+    img.loading = "lazy";
+    img.onerror = () => img.classList.add("img-missing");
+    imgWrap.appendChild(img);
+  }
+
+  const label = document.createElement("span");
+  label.className = "kahoot-label";
+  label.textContent = choice.label;
+
+  btn.append(shape, letter, imgWrap, label);
+  btn.addEventListener("click", () => handleAnswer(index));
+  return btn;
+}
+
 function loadQuestion() {
   answered = false;
   const q = quizQuestions[currentQuestion];
+  if (!q) return;
+
   els.progressBar.style.width = `${(currentQuestion / quizQuestions.length) * 100}%`;
   els.questionCounter.textContent = `Question ${currentQuestion + 1} / ${quizQuestions.length}`;
   els.questionCategory.textContent = q.category;
@@ -121,24 +212,12 @@ function loadQuestion() {
   els.btnNext.classList.add("hidden");
   els.answers.innerHTML = "";
 
-  currentCorrectIndex = q.correctDisplayIndex;
+  const choices = q.displayChoices?.length ? q.displayChoices : normalizeChoices(q);
+  currentCorrectIndex = choices.findIndex((c) => c.label === q.correctAnswer);
+  if (currentCorrectIndex < 0) currentCorrectIndex = 0;
 
-  q.displayChoices.forEach((choice, i) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = `kahoot-tile kahoot-tile--${i}`;
-    btn.innerHTML = `
-      <span class="kahoot-shape">${KAHOOT_ICONS[i]}</span>
-      <span class="kahoot-letter">${LETTERS[i]}</span>
-      <span class="kahoot-img-wrap">
-        <img src="${choice.image}" alt="${choice.imageAlt || choice.label}" loading="lazy">
-      </span>
-      <span class="kahoot-label">${choice.label}</span>
-    `;
-    const img = btn.querySelector("img");
-    img.onerror = () => img.classList.add("img-missing");
-    btn.addEventListener("click", () => handleAnswer(i));
-    els.answers.appendChild(btn);
+  choices.forEach((choice, i) => {
+    els.answers.appendChild(createKahootTile(choice, i));
   });
 }
 
