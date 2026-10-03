@@ -120,7 +120,7 @@ const CHOICE_IMAGES = {
 
   Hiver: "images/answers/saison-hiver.jpg",
 
-  Monster: "images/answers/boisson-monster.jpg",
+  Monster: "images/answers/boisson-monster.png",
 
   Oasis: "images/answers/boisson-oasis.jpg",
 
